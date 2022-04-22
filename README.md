@@ -8,4 +8,4 @@ Steps:
 - choose "enable" from the popped up window.
 
 Keywords:
-- React-Authentication
+- React-Firebase-Create-Account

@@ -30,6 +30,7 @@ const AuthForm = () => {
     let url;
 
     if (isLogin) {
+      // React-Firebase-Login-Account
       url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDz4w8qDeBEeaGk1IiecPpNWYWavqqncYQ'
     } else {
       // This link is gotten from Firebase Auth REST API docs for POST request to

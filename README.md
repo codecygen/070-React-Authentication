@@ -1,0 +1,1 @@
+This is a token based authentication project for React.

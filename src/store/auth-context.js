@@ -1,5 +1,5 @@
 // React-Context-API-Login-Logout-Management
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 
 // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
 let logoutTimer;
@@ -11,54 +11,18 @@ const AuthContext = React.createContext({
     logout: () => { },
 });
 
-// React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-const calculateRemainingTime = expirationTime => {
-    const currentTime = new Date().getTime();
-    const adjustedExpirationTime = new Date(expirationTime).getTime();
-
-    const remainingDuration = adjustedExpirationTime - currentTime;
-
-    return remainingDuration;
-};
-
-// React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-const retrievedStoredToken = () => {
-    const storedToken = localStorage.getItem('token');
-    const storedExpirationDate = localStorage.getItem('expirationTime');
-
-    const remainingTime = calculateRemainingTime(storedExpirationDate);
-
-    if (remainingTime <= 6000) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('expirationTime');
-        return null;
-    }
-
-    return {
-        token: storedToken,
-        duration: remainingTime
-    };
-};
-
 export const AuthContextProvider = props => {
     // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-    const tokenData = retrievedStoredToken();
+    const initialToken = localStorage.getItem('token');
 
     // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-    let initialToken;
-
-    if (tokenData) {
-        // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-        initialToken = tokenData.token;
-    }
-
     const [token, setToken] = useState(initialToken);
 
     // Converts Object to boolean. If it was falsey 
     // (e.g. 0, null, undefined, etc.), it will be false, otherwise, true.
     const userIsLoggedIn = !!token;
 
-    const logoutHandler = () => {
+    const logoutHandler = useCallback(() => {
         setToken(null);
         // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
         localStorage.removeItem('token');
@@ -67,10 +31,8 @@ export const AuthContextProvider = props => {
         localStorage.removeItem('expirationTime');
 
         // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-        if (logoutTimer) {
-            clearTimeout(logoutTimer);
-        }
-    };
+        clearTimeout(logoutTimer);
+    }, []);
 
     const loginHandler = (token, expirationTime) => {
         setToken(token);
@@ -83,18 +45,18 @@ export const AuthContextProvider = props => {
         localStorage.setItem('expirationTime', expirationTime);
 
         // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-        const remainingTime = calculateRemainingTime(expirationTime);
-
-        // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
-        logoutTimer = setTimeout(logoutHandler, remainingTime);
+        // This section automatically logs out the user when the token expires.
+        logoutTimer = setTimeout(logoutHandler, expirationTime - Date.now());
     };
 
     // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
+    // This section gets the info back from localStorage in every refresh.
     useEffect(() => {
-        if (tokenData) {
-            logoutTimer = setTimeout(logoutHandler, tokenData.duration);
+        if (token) {
+            let timeLeft = localStorage.getItem('expirationTime') - Date.now();
+            if (timeLeft < 6000) logoutHandler();
         }
-    }, [tokenData, logoutHandler]);
+    }, [token, logoutHandler]);
 
     const contextValue = {
         token: token,

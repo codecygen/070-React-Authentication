@@ -1,4 +1,4 @@
-# Firebase - Token Based Authentication
+# Firebase Auth REST API - Token Based Authentication
 
 This is a token based authentication project for React. It gets token from Firebase and uses it to display the restricted content of the website.
 

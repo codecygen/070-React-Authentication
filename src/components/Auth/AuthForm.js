@@ -1,5 +1,9 @@
 // React-Firebase-Create-Account
-import { useState, useRef } from 'react';
+// React-Context-API-Login-Logout-Management
+import { useState, useRef, useContext } from 'react';
+
+// React-Context-API-Login-Logout-Management
+import AuthContex from '../../store/auth-context';
 
 import classes from './AuthForm.module.css';
 
@@ -8,6 +12,9 @@ const AuthForm = () => {
   const emailInputRef = useRef();
   // React-Firebase-Create-Account
   const passwordInputRef = useRef();
+
+  // React-Context-API-Login-Logout-Management
+  const authCtx = useContext(AuthContex);
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -64,7 +71,8 @@ const AuthForm = () => {
         });
       }
     }).then(data => {
-      console.log(data);
+      // React-Context-API-Login-Logout-Management
+      authCtx.login(data.idToken);
     }).catch(err =>{ 
       alert(err.message);
     });

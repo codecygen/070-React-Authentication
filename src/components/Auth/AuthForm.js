@@ -2,12 +2,16 @@
 // React-Context-API-Login-Logout-Management
 import { useState, useRef, useContext } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 // React-Context-API-Login-Logout-Management
 import AuthContex from '../../store/auth-context';
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
+  const navigate = useNavigate();
+
   // React-Firebase-Create-Account
   const emailInputRef = useRef();
   // React-Firebase-Create-Account
@@ -73,6 +77,7 @@ const AuthForm = () => {
     }).then(data => {
       // React-Context-API-Login-Logout-Management
       authCtx.login(data.idToken);
+      navigate('/', {replace: true});
     }).catch(err =>{ 
       alert(err.message);
     });

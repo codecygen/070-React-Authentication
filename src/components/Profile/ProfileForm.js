@@ -3,12 +3,16 @@
 // React-Context-API-Login-Logout-Management
 import { useRef, useContext } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 // React-Context-API-Login-Logout-Management
 import AuthContext from '../../store/auth-context';
 
 import classes from './ProfileForm.module.css';
 
 const ProfileForm = () => {
+  const navigate = useNavigate();
+
   const newPasswordInputRef = useRef();
 
   // React-Context-API-Login-Logout-Management
@@ -33,6 +37,8 @@ const ProfileForm = () => {
       }
     }).then(res => {
       // assumption: Always succeeds!
+
+      navigate('/', {replace: true});
     });
 
   };

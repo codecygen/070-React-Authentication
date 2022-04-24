@@ -15,6 +15,12 @@ const MainNavigation = () => {
   // React-Context-API-Login-Logout-Management
   const isLoggedIn = authCtx.isLoggedIn;
 
+  // React-Context-API-Login-Logout-Management
+  // React-Firebase-Logout-Account
+  const logoutHandler = () => {
+    authCtx.logout();
+  };
+
   return (
     <header className={classes.header}>
       <Link to='/'>
@@ -39,7 +45,9 @@ const MainNavigation = () => {
           {/* React-Context-API-Login-Logout-Management */}
           {isLoggedIn && (
             <li>
-              <button>Logout</button>
+              {/* React-Context-API-Login-Logout-Management */}
+              {/* React-Firebase-Logout-Account */}
+              <button onClick={logoutHandler}>Logout</button>
             </li>
           )}
         </ul>

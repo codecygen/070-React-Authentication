@@ -75,8 +75,12 @@ const AuthForm = () => {
         });
       }
     }).then(data => {
+      // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
+      const expirationTime = new Date(new Date().getTime() + (+data.expiresIn * 1000));
+
       // React-Context-API-Login-Logout-Management
-      authCtx.login(data.idToken);
+      // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
+      authCtx.login(data.idToken, expirationTime.toISOString());
       navigate('/', {replace: true});
     }).catch(err =>{ 
       alert(err.message);

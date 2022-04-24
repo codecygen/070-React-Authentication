@@ -15,3 +15,4 @@ Keywords:
 - React-Context-API-Login-Logout-Management
 - React-Firebase-Create-Account
 - React-Firebase-Login-Account
+- React-Firebase-Change-Password

@@ -8,8 +8,18 @@ const AuthContext = React.createContext({
     logout: () => {},
 });
 
+// React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
+const calculateRemainingTime = expirationTime => {
+    const currentTime = new Date().getTime();
+    const adjustedExpirationTime = new Date(expirationTime).getTime();
+
+    const remainingDuration = adjustedExpirationTime - currentTime;
+
+    return remainingDuration;
+};
+
 export const AuthContextProvider = props => {
-    // React-Persisting-Login-Status-Token-When-Page-Reloads
+    // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
     const initialToken = localStorage.getItem('token');
 
     const [token, setToken] = useState(initialToken);
@@ -18,17 +28,17 @@ export const AuthContextProvider = props => {
     // (e.g. 0, null, undefined, etc.), it will be false, otherwise, true.
     const userIsLoggedIn = !!token;
 
-    const loginHandler = token => {
+    const loginHandler = (token, expirationTime) => {
         setToken(token);
 
-        // React-Persisting-Login-Status-Token-When-Page-Reloads
+        // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
         // local storage is only able to store strings and numbers as data.
         localStorage.setItem('token', token);
     };
 
     const logoutHandler = () => {
         setToken(null);
-        // React-Persisting-Login-Status-Token-When-Page-Reloads
+        // React-Persisting-Login-Status-Token-When-Page-Reloads-And-Setting-Expiration
         localStorage.removeItem('token');
     };
 

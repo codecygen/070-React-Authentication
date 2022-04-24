@@ -9,7 +9,10 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = props => {
-    const [token, setToken] = useState(null);
+    // React-Persisting-Login-Status-Token-When-Page-Reloads
+    const initialToken = localStorage.getItem('token');
+
+    const [token, setToken] = useState(initialToken);
 
     // Converts Object to boolean. If it was falsey 
     // (e.g. 0, null, undefined, etc.), it will be false, otherwise, true.
@@ -17,10 +20,16 @@ export const AuthContextProvider = props => {
 
     const loginHandler = token => {
         setToken(token);
+
+        // React-Persisting-Login-Status-Token-When-Page-Reloads
+        // local storage is only able to store strings and numbers as data.
+        localStorage.setItem('token', token);
     };
 
     const logoutHandler = () => {
         setToken(null);
+        // React-Persisting-Login-Status-Token-When-Page-Reloads
+        localStorage.removeItem('token');
     };
 
     const contextValue = {
